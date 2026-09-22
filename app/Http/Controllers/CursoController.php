@@ -43,13 +43,23 @@ class CursoController extends Controller
      * GET /api/cursos/{id}
      * No requiere autenticación
      */
-   public function show($id)
+    public function show($id)
     {
         $curso = Curso::with('modulos.lecciones')->find($id);
         
         if (!$curso) {
             return response()->json(['message' => 'Curso no encontrado'], 404);
         }
+        
+        // Verificar si el usuario está inscripto (si está logueado)
+        $inscripto = false;
+        $user = auth('sanctum')->user();
+        if ($user) {
+            $inscripto = $user->cursos()->where('curso_id', $id)->exists();
+        }
+        
+        // Agregar el campo 'inscripto' a la respuesta
+        $curso->inscripto = $inscripto;
         
         return response()->json($curso);
     }
