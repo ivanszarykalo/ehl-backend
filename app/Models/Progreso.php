@@ -9,8 +9,13 @@ class Progreso extends Model
 {
     use HasFactory;
 
-    // Agregá esta línea para forzar el nombre de la tabla:
+    // Forzar el nombre de la tabla en singular
     protected $table = 'progreso';
 
-    // ... el resto de tu modelo (fillable, casts, etc.)
+    // Permitir la asignación masiva de los campos reales
+    protected $fillable = [
+        'user_id',
+        'leccion_id',
+        'visto',
+    ];
 }
